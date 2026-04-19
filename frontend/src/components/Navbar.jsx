@@ -1,9 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-<<<<<<< HEAD
 import logo from '../assets/mei1.jpeg';
-=======
->>>>>>> 7b2c975eaa3784bd4d965c54a5666f63e0fc3285
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -17,11 +14,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/dashboard" className="navbar-brand">
-<<<<<<< HEAD
         <div><img src={logo} className='w-26 h-20 rounded-2xl mt-4' alt="Logo"/></div>
-=======
-        <div className="logo-icon">🎯</div>
->>>>>>> 7b2c975eaa3784bd4d965c54a5666f63e0fc3285
         <div>
           <div className="logo-text">மெய்யறிவு</div>
           <div style={{ color: '#a8b8d0', fontSize: 9, letterSpacing: 0.5 }}>COMPETITIVE EXAMS</div>
