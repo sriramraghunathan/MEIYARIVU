@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+<<<<<<< HEAD
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+=======
+
+>>>>>>> 7b2c975eaa3784bd4d965c54a5666f63e0fc3285
 :root {
   --navy: #0a1628;
   --navy2: #112240;
