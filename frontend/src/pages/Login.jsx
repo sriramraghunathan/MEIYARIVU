@@ -25,9 +25,11 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <div>
-            <img src={logo} className="w-26 h-20 ml-32 rounded-2xl mt-4" alt="Logo" />
-          </div>{" "}
+          <img
+            src={logo}
+            className="w-24 h-20 mx-auto block rounded-2xl mt-4"
+            alt="Logo"
+          />
           <h2>Welcome Back</h2>
           <p>Login to your மெய்யறிவு account</p>
         </div>
