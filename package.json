@@ -9,13 +9,10 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
-<<<<<<< HEAD
   }
 }
-=======
-  },
+ {
   "dependencies": {
     "firebase": "^12.12.0"
   }
 }
->>>>>>> cd49abd (login with google)

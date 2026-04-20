@@ -50,9 +50,6 @@ export default function Profile() {
 
       {/* Profile Card */}
       <div className="card" style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 28 }}>
-        <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #1a3a6b, #c9a84c)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, flexShrink: 0 }}>
-          {user?.name?.charAt(0).toUpperCase()}
-        </div>
         <img
             src={user?.photoURL || "https://via.placeholder.com/40"}
             alt="Profile"
