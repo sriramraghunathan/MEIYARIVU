@@ -111,7 +111,7 @@ export default function Navbar() {
       <nav className="navbar" style={{ position: "relative" }}>
         <Link to="/dashboard" className="navbar-brand">
           <div>
-            <img src={logo} className="w-26 h-20 rounded-2xl mt-4" alt="Logo" />
+            <img src={logo} className="w-16 h-16 rounded-2xl" alt="Logo" />
           </div>
           <div>
             <div className="logo-text">மெய்யறிவு</div>
@@ -174,9 +174,14 @@ export default function Navbar() {
             {/* ── Mobile dropdown ── */}
             {menuOpen && (
               <div className="mei-mobile-menu">
-<Link to="/profile" className="mei-mobile-profile" onClick={close}>
-  👤 {user?.displayName || "User"} 
-</Link>                <Link to="/dashboard" className="nav-link" onClick={close}>
+                <Link
+                  to="/profile"
+                  className="mei-mobile-profile"
+                  onClick={close}
+                >
+                  👤 {user?.displayName || "User"}
+                </Link>{" "}
+                <Link to="/dashboard" className="nav-link" onClick={close}>
                   Dashboard
                 </Link>
                 <Link to="/videos" className="nav-link" onClick={close}>
