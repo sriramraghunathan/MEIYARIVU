@@ -154,7 +154,7 @@ export default function Navbar() {
               </Link>
             )}
             <div className="nav-right">
-              <Link to="/profile" className="nav-link">
+              <Link to="/profile" className="nav-link ">
                 👤 {user.name}
               </Link>
               <button onClick={handleLogout} className="btn btn-danger">
@@ -174,8 +174,9 @@ export default function Navbar() {
             {/* ── Mobile dropdown ── */}
             {menuOpen && (
               <div className="mei-mobile-menu">
-                <div className="mei-mobile-profile">👤 {user.name}</div>
-                <Link to="/dashboard" className="nav-link" onClick={close}>
+<Link to="/profile" className="mei-mobile-profile" onClick={close}>
+  👤 {user?.displayName || "User"} 
+</Link>                <Link to="/dashboard" className="nav-link" onClick={close}>
                   Dashboard
                 </Link>
                 <Link to="/videos" className="nav-link" onClick={close}>
