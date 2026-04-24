@@ -1,29 +1,21 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { auth, googleProvider } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  updateProfile,
-} from "firebase/auth";
-import logo from "../assets/mei1.jpeg";
+import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { ADMIN_EMAIL } from "../config";
+import logo from "../assets/mei1.jpeg"; // ✅ your logo
 
 export default function Register() {
   const [form, setForm] = useState({
-    name: "",
     email: "",
-    phone: "",
     password: "",
   });
 
   const [error, setError] = useState("");
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
-  // 🔹 Email Register
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
     try {
       const res = await createUserWithEmailAndPassword(
         auth,
@@ -32,62 +24,56 @@ export default function Register() {
       );
 
       const user = res.user;
+      const isAdmin = user.email === ADMIN_EMAIL;
 
-      // ✅ Save name
-      await updateProfile(user, {
-        displayName: form.name,
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        approved: isAdmin ? true : false,
+        role: isAdmin ? "admin" : "user",
+        createdAt: new Date(),
       });
 
-      login(user, user.accessToken);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.message || "Registration failed");
-    }
-  };
+      alert(
+        isAdmin
+          ? "Admin account created"
+          : "Registered! Wait for admin approval"
+      );
 
-  // 🔹 Google Register
-  const handleGoogleRegister = async () => {
-    try {
-      const res = await signInWithPopup(auth, googleProvider);
-      const user = res.user;
-
-      login(user, user.accessToken);
-      navigate("/dashboard");
     } catch (err) {
-      setError(err.message || "Google signup failed");
+      console.error(err);
+      setError(err.message);
     }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
+
+        {/* 🔥 Logo + Heading */}
         <div className="auth-logo">
           <img
             src={logo}
             className="w-24 h-20 mx-auto block rounded-2xl mt-4"
             alt="Logo"
           />
-          <h2>Create Account</h2>
-          <p>Join thousands of TNPSC aspirants</p>
+          <h2 className="text-center text-xl font-bold mt-2">
+            Create Account
+          </h2>
+          <p className="text-center text-gray-500 text-sm">
+            Join your மெய்யறிவு platform
+          </p>
         </div>
 
-        {error && <div className="error-msg">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Full Name</label>
-            <input
-              className="form-input"
-              placeholder="Your full name"
-              type="text"
-              value={form.name}
-              onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
-              }
-            />
+        {/* ❌ Error */}
+        {error && (
+          <div className="error-msg text-center text-red-500 mt-2">
+            {error}
           </div>
+        )}
 
-          <div className="form-group">
+        {/* 🔐 Form */}
+        <form onSubmit={handleRegister}>
+          <div className="form-group mt-3">
             <label className="form-label">Email Address</label>
             <input
               className="form-input"
@@ -100,24 +86,11 @@ export default function Register() {
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Phone Number</label>
-            <input
-              className="form-input"
-              placeholder="10-digit mobile number"
-              type="text"
-              value={form.phone}
-              onChange={(e) =>
-                setForm({ ...form, phone: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="form-group">
+          <div className="form-group mt-2">
             <label className="form-label">Password</label>
             <input
               className="form-input"
-              placeholder="Min 6 characters"
+              placeholder="••••••••"
               type="password"
               value={form.password}
               onChange={(e) =>
@@ -128,31 +101,20 @@ export default function Register() {
 
           <button
             type="submit"
-            className="btn btn-primary btn-lg btn-block"
-            style={{ marginTop: 8 }}
+            className="btn btn-primary btn-lg btn-block mt-4"
           >
-            Create Account →
+            Register →
           </button>
         </form>
 
-        {/* 🔥 Google Register */}
-        <button
-          onClick={handleGoogleRegister}
-          className="btn btn-google btn-lg btn-block"
-          style={{
-            marginTop: 10,
-            background: "#fff",
-            color: "#000",
-            border: "1px solid #ccc",
-          }}
-        >
-          Continue with Google
-        </button>
-
-        <div className="auth-footer">
+        {/* 🔗 Footer */}
+        <div className="auth-footer text-center mt-3">
           Already have an account?{" "}
-          <Link to="/login">Login here</Link>
+          <a href="/login" className="text-blue-500">
+            Login here
+          </a>
         </div>
+
       </div>
     </div>
   );

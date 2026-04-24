@@ -1,32 +1,64 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [token, setToken] = useState(null); // ✅ FIX added
 
-  // ✅ Auto login from Firebase
+  // ✅ Auto login + fetch Firestore userData
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          const snap = await getDoc(userRef);
+
+          if (snap.exists()) {
+            setUserData(snap.data());
+          }
+        } catch (error) {
+          console.error("Firestore error:", error.message);
+        }
+      } else {
+        setUserData(null);
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const login = (user) => {
+  // ✅ Login function (called from Login.jsx)
+  const login = (user, token, data) => {
     setUser(user);
+    setToken(token);
+    setUserData(data);
   };
 
-  const logout = () => {
+  // ✅ Logout
+  const logout = async () => {
+    await auth.signOut();
     setUser(null);
-    auth.signOut(); // ✅ Firebase logout
+    setUserData(null);
+    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        userData, // ✅ VERY IMPORTANT
+        token,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
