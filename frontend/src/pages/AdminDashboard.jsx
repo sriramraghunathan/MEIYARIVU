@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { db } from "../firebase";
+
 import {
   collection,
   getDocs,
@@ -16,22 +17,26 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
 
-  // SECTION STATE
+  // ACTIVE SECTION
   const [activeSection, setActiveSection] =
     useState("users");
 
   // ================= FETCH USERS =================
   const fetchUsers = async () => {
-    const snapshot = await getDocs(
-      collection(db, "users")
-    );
+    try {
+      const snapshot = await getDocs(
+        collection(db, "users")
+      );
 
-    setUsers(
-      snapshot.docs.map((doc) => ({
+      const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }))
-    );
+      }));
+
+      setUsers(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // ================= FETCH ENROLLMENTS =================
@@ -47,6 +52,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // ================= USE EFFECT =================
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchUsers();
@@ -55,11 +61,15 @@ export default function AdminDashboard() {
 
   // ================= APPROVE USER =================
   const approveUser = async (id) => {
-    await updateDoc(doc(db, "users", id), {
-      approved: true,
-    });
+    try {
+      await updateDoc(doc(db, "users", id), {
+        approved: true,
+      });
 
-    fetchUsers();
+      fetchUsers();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // ================= DELETE STUDENT =================
@@ -97,7 +107,7 @@ export default function AdminDashboard() {
           Admin Dashboard
         </h1>
 
-        {/* USER SECTION */}
+        {/* USER APPROVAL */}
         <button
           onClick={() => setActiveSection("users")}
           className={`w-full text-left px-4 py-3 rounded mb-3 ${
@@ -109,7 +119,7 @@ export default function AdminDashboard() {
           User Approval
         </button>
 
-        {/* ENROLLMENT SECTION */}
+        {/* ENROLLMENT */}
         <button
           onClick={() =>
             setActiveSection("enrollments")
@@ -124,10 +134,10 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {/* ================= CONTENT ================= */}
+      {/* ================= MAIN CONTENT ================= */}
       <div className="flex-1 p-6">
 
-        {/* ================= USER APPROVAL ================= */}
+        {/* ================= USERS ================= */}
         {activeSection === "users" && (
           <div>
 
@@ -138,7 +148,7 @@ export default function AdminDashboard() {
             {users.map((user) => (
               <div
                 key={user.id}
-                className="bg-white border rounded shadow p-4 mb-3"
+                className="bg-white border rounded shadow p-4 mb-4"
               >
                 <p className="font-semibold">
                   {user.email}
@@ -178,6 +188,7 @@ export default function AdminDashboard() {
 
             {/* SEARCH */}
             <input
+              type="text"
               placeholder="Search by name or phone..."
               className="border p-3 mb-5 w-full rounded"
               value={search}
