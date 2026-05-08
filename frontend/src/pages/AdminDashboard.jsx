@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { db } from "../firebase";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+
 import { API_BASE_URL } from "../config";
 
 export default function AdminDashboard() {
@@ -10,12 +16,15 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
 
-  // NEW
-  const [activeSection, setActiveSection] = useState("users");
+  // SECTION STATE
+  const [activeSection, setActiveSection] =
+    useState("users");
 
-  // ================= FETCH =================
+  // ================= FETCH USERS =================
   const fetchUsers = async () => {
-    const snapshot = await getDocs(collection(db, "users"));
+    const snapshot = await getDocs(
+      collection(db, "users")
+    );
 
     setUsers(
       snapshot.docs.map((doc) => ({
@@ -25,9 +34,17 @@ export default function AdminDashboard() {
     );
   };
 
+  // ================= FETCH ENROLLMENTS =================
   const fetchEnrollments = async () => {
-    const res = await axios.get(`${API_BASE_URL}/uploads/`);
-    setEnrollments(res.data);
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/api/enroll`
+      );
+
+      setEnrollments(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -36,7 +53,7 @@ export default function AdminDashboard() {
     fetchEnrollments();
   }, []);
 
-  // ================= ACTIONS =================
+  // ================= APPROVE USER =================
   const approveUser = async (id) => {
     await updateDoc(doc(db, "users", id), {
       approved: true,
@@ -45,18 +62,28 @@ export default function AdminDashboard() {
     fetchUsers();
   };
 
+  // ================= DELETE STUDENT =================
   const deleteStudent = async (id) => {
-    if (!window.confirm("Delete this student?")) return;
+    if (!window.confirm("Delete this student?"))
+      return;
 
-    await axios.delete(`http://localhost:5000/api/enroll/${id}`);
+    try {
+      await axios.delete(
+        `${API_BASE_URL}/api/enroll/${id}`
+      );
 
-    fetchEnrollments();
+      fetchEnrollments();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  // ================= FILTER =================
+  // ================= SEARCH FILTER =================
   const filtered = enrollments.filter(
     (item) =>
-      item.name?.toLowerCase().includes(search.toLowerCase()) ||
+      item.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase()) ||
       item.contact?.includes(search)
   );
 
@@ -70,6 +97,7 @@ export default function AdminDashboard() {
           Admin Dashboard
         </h1>
 
+        {/* USER SECTION */}
         <button
           onClick={() => setActiveSection("users")}
           className={`w-full text-left px-4 py-3 rounded mb-3 ${
@@ -81,8 +109,11 @@ export default function AdminDashboard() {
           User Approval
         </button>
 
+        {/* ENROLLMENT SECTION */}
         <button
-          onClick={() => setActiveSection("enrollments")}
+          onClick={() =>
+            setActiveSection("enrollments")
+          }
           className={`w-full text-left px-4 py-3 rounded ${
             activeSection === "enrollments"
               ? "bg-white text-blue-900"
@@ -96,9 +127,10 @@ export default function AdminDashboard() {
       {/* ================= CONTENT ================= */}
       <div className="flex-1 p-6">
 
-        {/* ================= USERS ================= */}
+        {/* ================= USER APPROVAL ================= */}
         {activeSection === "users" && (
           <div>
+
             <h2 className="text-3xl font-bold mb-6">
               User Approvals
             </h2>
@@ -108,7 +140,9 @@ export default function AdminDashboard() {
                 key={user.id}
                 className="bg-white border rounded shadow p-4 mb-3"
               >
-                <p className="font-semibold">{user.email}</p>
+                <p className="font-semibold">
+                  {user.email}
+                </p>
 
                 <p className="mt-1">
                   Status:
@@ -121,7 +155,9 @@ export default function AdminDashboard() {
 
                 {!user.approved && (
                   <button
-                    onClick={() => approveUser(user.id)}
+                    onClick={() =>
+                      approveUser(user.id)
+                    }
                     className="bg-green-600 text-white px-4 py-2 mt-3 rounded"
                   >
                     Approve User
@@ -145,49 +181,80 @@ export default function AdminDashboard() {
               placeholder="Search by name or phone..."
               className="border p-3 mb-5 w-full rounded"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
 
+            {/* TABLE */}
             <div className="overflow-auto bg-white rounded shadow">
+
               <table className="min-w-full border text-sm">
+
                 <thead className="bg-blue-700 text-white">
                   <tr>
-                    <th className="border p-3">Photo</th>
-                    <th className="border p-3">Name</th>
-                    <th className="border p-3">Contact</th>
-                    <th className="border p-3">Course</th>
-                    <th className="border p-3">Actions</th>
+                    <th className="border p-3">
+                      Photo
+                    </th>
+
+                    <th className="border p-3">
+                      Name
+                    </th>
+
+                    <th className="border p-3">
+                      Contact
+                    </th>
+
+                    <th className="border p-3">
+                      Course
+                    </th>
+
+                    <th className="border p-3">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {filtered.map((item) => (
                     <tr key={item._id}>
+
+                      {/* PHOTO */}
                       <td className="border p-2">
-                        {item.photo && (
+                        {item.photo ? (
                           <img
-                              src={`${API_BASE_URL}/uploads/${item.photo}`}
+                            src={`${API_BASE_URL}/uploads/${item.photo}`}
                             className="w-14 h-16 object-cover"
                             alt="student"
                           />
+                        ) : (
+                          <p>No Photo</p>
                         )}
                       </td>
 
-                      <td className="border p-2">{item.name}</td>
+                      {/* NAME */}
+                      <td className="border p-2">
+                        {item.name}
+                      </td>
 
+                      {/* CONTACT */}
                       <td className="border p-2">
                         {item.contact}
                       </td>
 
+                      {/* COURSE */}
                       <td className="border p-2">
                         {item.selectedCourse}
                       </td>
 
+                      {/* ACTIONS */}
                       <td className="border p-2 space-x-2">
 
                         {/* VIEW */}
                         <button
-                          onClick={() => setSelected(item)}
+                          onClick={() =>
+                            setSelected(item)
+                          }
                           className="bg-blue-600 text-white px-3 py-1 rounded"
                         >
                           View
@@ -197,7 +264,7 @@ export default function AdminDashboard() {
                         <button
                           onClick={() =>
                             window.open(
-                              `http://localhost:5000/api/enroll/word/${item._id}`,
+                              `${API_BASE_URL}/api/enroll/word/${item._id}`,
                               "_blank"
                             )
                           }
@@ -208,7 +275,9 @@ export default function AdminDashboard() {
 
                         {/* DELETE */}
                         <button
-                          onClick={() => deleteStudent(item._id)}
+                          onClick={() =>
+                            deleteStudent(item._id)
+                          }
                           className="bg-red-600 text-white px-3 py-1 rounded"
                         >
                           Delete
@@ -218,6 +287,7 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                 </tbody>
+
               </table>
             </div>
           </div>
@@ -225,7 +295,7 @@ export default function AdminDashboard() {
 
         {/* ================= MODAL ================= */}
         {selected && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
 
             <div className="bg-white p-6 max-w-3xl w-full rounded shadow-lg overflow-auto max-h-[90vh]">
 
@@ -235,27 +305,68 @@ export default function AdminDashboard() {
 
               <div className="flex gap-5">
 
-                <img
-                  src={`http://localhost:5000/uploads/${selected.photo}`}
-                  className="w-32 h-40 object-cover border"
-                  alt="student"
-                />
+                {/* PHOTO */}
+                {selected.photo && (
+                  <img
+                    src={`${API_BASE_URL}/uploads/${selected.photo}`}
+                    className="w-32 h-40 object-cover border"
+                    alt="student"
+                  />
+                )}
 
+                {/* DETAILS */}
                 <div className="space-y-2">
-                  <p><b>Name:</b> {selected.name}</p>
-                  <p><b>DOB:</b> {selected.dob}</p>
-                  <p><b>Gender:</b> {selected.gender}</p>
-                  <p><b>Contact:</b> {selected.contact}</p>
-                  <p><b>Course:</b> {selected.selectedCourse}</p>
+
+                  <p>
+                    <b>Name:</b> {selected.name}
+                  </p>
+
+                  <p>
+                    <b>DOB:</b> {selected.dob}
+                  </p>
+
+                  <p>
+                    <b>Gender:</b> {selected.gender}
+                  </p>
+
+                  <p>
+                    <b>Contact:</b> {selected.contact}
+                  </p>
+
+                  <p>
+                    <b>Course:</b>{" "}
+                    {selected.selectedCourse}
+                  </p>
+
                 </div>
               </div>
 
+              {/* EXTRA DETAILS */}
               <div className="mt-5 space-y-2">
-                <p><b>Father:</b> {selected.fatherName}</p>
-                <p><b>Mother:</b> {selected.motherName}</p>
-                <p><b>Address:</b> {selected.presentAddress}</p>
+
+                <p>
+                  <b>Father:</b>{" "}
+                  {selected.fatherName}
+                </p>
+
+                <p>
+                  <b>Mother:</b>{" "}
+                  {selected.motherName}
+                </p>
+
+                <p>
+                  <b>Present Address:</b>{" "}
+                  {selected.presentAddress}
+                </p>
+
+                <p>
+                  <b>Permanent Address:</b>{" "}
+                  {selected.permanentAddress}
+                </p>
+
               </div>
 
+              {/* CLOSE */}
               <button
                 onClick={() => setSelected(null)}
                 className="mt-6 bg-gray-700 text-white px-5 py-2 rounded"
