@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { db } from "../firebase";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import { API_BASE_URL } from "../config";
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -25,7 +26,7 @@ export default function AdminDashboard() {
   };
 
   const fetchEnrollments = async () => {
-    const res = await axios.get("http://localhost:5000/api/enroll");
+    const res = await axios.get(`${API_BASE_URL}/uploads/`);
     setEnrollments(res.data);
   };
 
@@ -165,7 +166,7 @@ export default function AdminDashboard() {
                       <td className="border p-2">
                         {item.photo && (
                           <img
-                            src={`http://localhost:5000/uploads/${item.photo}`}
+                              src={`${API_BASE_URL}/uploads/${item.photo}`}
                             className="w-14 h-16 object-cover"
                             alt="student"
                           />

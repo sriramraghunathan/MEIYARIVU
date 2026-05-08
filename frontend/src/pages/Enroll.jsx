@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config";
 
 export default function Enroll() {
   const [form, setForm] = useState({});
@@ -20,16 +21,23 @@ export default function Enroll() {
     e.preventDefault();
 
     const data = new FormData();
+
     Object.keys(form).forEach((key) => data.append(key, form[key]));
+
     data.append("photo", photo);
 
-    await axios.post("http://localhost:5000/api/enroll", data);
-    alert("Submitted!");
+    try {
+      await axios.post(`${API_BASE_URL}/api/enroll`, data);
+
+      alert("Submitted!");
+    } catch (err) {
+      console.log(err);
+      alert("Submission failed");
+    }
   };
 
   return (
     <div className="max-w-5xl mx-auto bg-white p-6 border">
-
       {/* HEADER */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-blue-700">
@@ -46,43 +54,69 @@ export default function Enroll() {
       </div>
 
       <form onSubmit={handleSubmit}>
-
         {/* TOP SECTION */}
         <div className="flex gap-4">
-
           {/* LEFT SIDE */}
           <div className="flex-1 space-y-3">
-
             <div className="flex items-center">
               <label className="w-48 font-semibold">Application Number</label>
-              <input className="border w-full p-1" name="appNo" onChange={handleChange} />
+              <input
+                className="border w-full p-1"
+                name="appNo"
+                onChange={handleChange}
+              />
             </div>
 
             <div className="flex items-center">
               <label className="w-48 font-semibold">Name</label>
-              <input className="border w-full p-1" name="name" onChange={handleChange} />
+              <input
+                className="border w-full p-1"
+                name="name"
+                onChange={handleChange}
+              />
             </div>
 
             <div className="flex items-center gap-2">
               <label className="w-48 font-semibold">Date of Birth</label>
-              <input type="date" className="border p-1" name="dob" onChange={handleChange} />
+              <input
+                type="date"
+                className="border p-1"
+                name="dob"
+                onChange={handleChange}
+              />
               <label className="font-semibold">Gender</label>
-              <input className="border p-1 w-32" name="gender" onChange={handleChange} />
+              <input
+                className="border p-1 w-32"
+                name="gender"
+                onChange={handleChange}
+              />
             </div>
 
             <div>
               <label className="font-semibold">Present Address :</label>
-              <textarea className="border w-full h-20 p-1" name="presentAddress" onChange={handleChange}></textarea>
+              <textarea
+                className="border w-full h-20 p-1"
+                name="presentAddress"
+                onChange={handleChange}
+              ></textarea>
             </div>
 
             <div>
               <label className="font-semibold">Permanent Address :</label>
-              <textarea className="border w-full h-20 p-1" name="permanentAddress" onChange={handleChange}></textarea>
+              <textarea
+                className="border w-full h-20 p-1"
+                name="permanentAddress"
+                onChange={handleChange}
+              ></textarea>
             </div>
 
             <div className="flex items-center">
               <label className="w-48 font-semibold">Contact Number</label>
-              <input className="border w-full p-1" name="contact" onChange={handleChange} />
+              <input
+                className="border w-full p-1"
+                name="contact"
+                onChange={handleChange}
+              />
             </div>
           </div>
 
@@ -96,7 +130,11 @@ export default function Enroll() {
               )}
             </div>
 
-            <input type="file" onChange={handlePhoto} className="mt-2 text-xs" />
+            <input
+              type="file"
+              onChange={handlePhoto}
+              className="mt-2 text-xs"
+            />
           </div>
         </div>
 
@@ -107,13 +145,38 @@ export default function Enroll() {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <input name="fatherName" placeholder="Father's Name" className="border p-1" onChange={handleChange} />
-            <input name="fatherOccupation" placeholder="Father's Occupation" className="border p-1" onChange={handleChange} />
-            <input name="motherName" placeholder="Mother's Name" className="border p-1" onChange={handleChange} />
-            <input name="motherOccupation" placeholder="Mother's Occupation" className="border p-1" onChange={handleChange} />
+            <input
+              name="fatherName"
+              placeholder="Father's Name"
+              className="border p-1"
+              onChange={handleChange}
+            />
+            <input
+              name="fatherOccupation"
+              placeholder="Father's Occupation"
+              className="border p-1"
+              onChange={handleChange}
+            />
+            <input
+              name="motherName"
+              placeholder="Mother's Name"
+              className="border p-1"
+              onChange={handleChange}
+            />
+            <input
+              name="motherOccupation"
+              placeholder="Mother's Occupation"
+              className="border p-1"
+              onChange={handleChange}
+            />
           </div>
 
-          <input name="parentContact" placeholder="Contact Details" className="border w-full mt-3 p-1" onChange={handleChange} />
+          <input
+            name="parentContact"
+            placeholder="Contact Details"
+            className="border w-full mt-3 p-1"
+            onChange={handleChange}
+          />
         </div>
 
         {/* EXAMS */}
@@ -127,8 +190,24 @@ export default function Enroll() {
           </p>
 
           <div className="flex gap-6 mt-1">
-            <label><input type="radio" name="exam" value="No" onChange={handleChange}/> No</label>
-            <label><input type="radio" name="exam" value="Yes" onChange={handleChange}/> Yes</label>
+            <label>
+              <input
+                type="radio"
+                name="exam"
+                value="No"
+                onChange={handleChange}
+              />{" "}
+              No
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="exam"
+                value="Yes"
+                onChange={handleChange}
+              />{" "}
+              Yes
+            </label>
           </div>
 
           <textarea
@@ -159,10 +238,18 @@ export default function Enroll() {
               {["10th", "12th", "UG", "PG"].map((c) => (
                 <tr key={c}>
                   <td className="border p-1">{c}</td>
-                  <td className="border p-1"><input className="w-full" /></td>
-                  <td className="border p-1"><input className="w-full" /></td>
-                  <td className="border p-1"><input className="w-full" /></td>
-                  <td className="border p-1"><input className="w-full" /></td>
+                  <td className="border p-1">
+                    <input className="w-full" />
+                  </td>
+                  <td className="border p-1">
+                    <input className="w-full" />
+                  </td>
+                  <td className="border p-1">
+                    <input className="w-full" />
+                  </td>
+                  <td className="border p-1">
+                    <input className="w-full" />
+                  </td>
                 </tr>
               ))}
             </tbody>
