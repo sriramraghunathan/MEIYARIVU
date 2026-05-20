@@ -629,6 +629,270 @@ function ExamCarousel() {
   );
 }
 
+const THIRUKKURALS = [
+  {
+    number: 1,
+    tamil: "அகர முதல எழுத்தெல்லாம் ஆதி\nபகவன் முதற்றே உலகு.",
+    translation: "As 'A' is the first of all letters, so the Eternal God is first in the world.",
+    chapter: "கடவுள் வாழ்த்து — Praise of God",
+  },
+  {
+    number: 2,
+    tamil: "கற்றதனால் ஆய பயனென்கொல் வாலறிவன்\nநற்றாள் தொழாஅர் எனின்.",
+    translation: "What is the use of learning if one worships not the feet of the Pure One?",
+    chapter: "கடவுள் வாழ்த்து — Praise of God",
+  },
+  {
+    number: 4,
+    tamil: "வேண்டுதல் வேண்டாமை இலானடி சேர்ந்தார்க்கு\nயாண்டும் இடும்பை இல.",
+    translation: "Those who seek the feet of the Lord free from desire and aversion shall never know grief.",
+    chapter: "கடவுள் வாழ்த்து — Praise of God",
+  },
+  {
+    number: 11,
+    tamil: "வான்நின்று உலகம் வழங்கி வருதலால்\nதான்அமிழ்தம் என்றுணரற் பாற்று.",
+    translation: "Since rain sustains the world, it is rightly called the nectar of life on earth.",
+    chapter: "வான்சிறப்பு — Excellence of Rain",
+  },
+  {
+    number: 20,
+    tamil: "யாதனின் யாதனின் நீங்கியான் நோதல்\nஅதனின் அதனின் இலன்.",
+    translation: "A person is freed from pain to exactly the extent they free themselves from desire.",
+    chapter: "நீத்தார் பெருமை — Greatness of Ascetics",
+  },
+  {
+    number: 40,
+    tamil: "அகன்அமர்ந்து செய்யாள் உறையும் முகனமர்ந்து\nநல்விருந்து ஓம்புவான் இல்.",
+    translation: "In the home of one who welcomes guests with a cheerful face, Lakshmi herself abides.",
+    chapter: "விருந்தோம்பல் — Hospitality",
+  },
+  {
+    number: 50,
+    tamil: "வையத்துள் வாழ்வாங்கு வாழ்பவன் வான்உறையும்\nதெய்வத்துள் வைக்கப் படும்.",
+    translation: "He who lives the fullest earthly life shall be counted among the gods of heaven.",
+    chapter: "இல்வாழ்க்கை — Domestic Virtue",
+  },
+  {
+    number: 70,
+    tamil: "மகன்தந்தைக்கு ஆற்றும் உதவி இவன்தந்தை\nஎன்நோற்றான்கொல் எனும்சொல்.",
+    translation: "The best service a son renders his father is to make others say, 'What merit did his father earn?'",
+    chapter: "மக்கட்பேறு — The Blessing of Children",
+  },
+  {
+    number: 80,
+    tamil: "அன்பிற்கும் உண்டோ அடைக்குந்தாழ் ஆர்வலர்\nபுன்கண்நீர் பூசல் தரும்.",
+    translation: "Is there a bolt that can lock love? The tears of the beloved will reveal it to the world.",
+    chapter: "அன்புடைமை — Possession of Love",
+  },
+  {
+    number: 108,
+    tamil: "நன்றி மறப்பது நன்றன்று நன்றல்லது\nசன்றே மறப்பது நன்று.",
+    translation: "To forget a benefit is wrong; but to forget an injury—even that same day—is right.",
+    chapter: "நன்றிமறவாமை — Not Forgetting Benefits",
+  },
+  {
+    number: 131,
+    tamil: "ஒழுக்கம் விழுப்பந் தரலான் ஒழுக்கம்\nஉயிரினும் ஓம்பப் படும்.",
+    translation: "Since virtue brings honour, conduct must be guarded more carefully than life itself.",
+    chapter: "ஒழுக்கமுடைமை — Virtue and Conduct",
+  },
+  {
+    number: 161,
+    tamil: "பொறுத்தல் இறப்பினை என்றும் அவாவினை\nபெற்றவர் ஆற்றல் பலர் அறியார்.",
+    translation: "Many do not know the strength of those who bear wrongs patiently and curb their desires.",
+    chapter: "பொறையுடைமை — Patience",
+  },
+  {
+    number: 215,
+    tamil: "ஆற்றுவார் ஆற்றல் பசிஆற்றல் அப்பசியை\nமாற்றுவார் ஆற்றல் பெரிது.",
+    translation: "Great is the strength to endure hunger; greater still is the strength of those who relieve it.",
+    chapter: "ஈகை — Charity",
+  },
+  {
+    number: 291,
+    tamil: "வாய்மை எனப்படுவது யாதெனின் யாதொன்றும்\nதீமை இலாத சொலல்.",
+    translation: "Truth is the utterance of words that are free from any trace of harm to others.",
+    chapter: "வாய்மை — Truthfulness",
+  },
+  {
+    number: 330,
+    tamil: "வெகுளாமை வேண்டுவான் வெய்தாக நன்னெஞ்சே\nதகுதியான் தங்கிக் கொளல்.",
+    translation: "O good heart, hold fast to equanimity—the swiftest path for one who desires to be free of anger.",
+    chapter: "வெகுளாமை — Non-Anger",
+  },
+  {
+    number: 371,
+    tamil: "இன்சொலால் ஈரம் அளைஇய புன்கண்ணீர்\nவல்லதீம் பாகு.",
+    translation: "Kind words laced with the warmth of love are sweeter than sugarcane juice itself.",
+    chapter: "இன்சொல்லுடைமை — Kindness of Speech",
+  },
+  {
+    number: 391,
+    tamil: "கற்க கசடற கற்பவை கற்றபின்\nநிற்க அதற்குத் தக.",
+    translation: "Learn thoroughly what is worth learning; then live by what you have learnt.",
+    chapter: "கல்வி — Learning",
+  },
+  {
+    number: 395,
+    tamil: "கற்றில்லார் கல்லாத ஆகவும் கற்றோரால்\nசொல்லலாம் தோதக நீர்.",
+    translation: "The learned can always add to their knowledge; the unlearned remain as standing water.",
+    chapter: "கல்வி — Learning",
+  },
+  {
+    number: 423,
+    tamil: "எண்ணென்ப ஏனை எழுத்தென்ப இவ்விரண்டும்\nகண்ணென்ப வாழும் உயிர்க்கு.",
+    translation: "Numbers and letters are called the two eyes of living beings.",
+    chapter: "எண்ணும் எழுத்தும் — Numbers and Letters",
+  },
+  {
+    number: 481,
+    tamil: "தொட்டனைத் தூறும் மணற்கேணி மாந்தர்க்கு\nகற்றனைத் தூறும் அறிவு.",
+    translation: "As a well in sand yields water to those who dig, so wisdom springs in those who learn.",
+    chapter: "கேள்வி — Listening",
+  },
+  {
+    number: 540,
+    tamil: "அழிவதூஉம் ஆவதூஉம் ஆகி வழிபயக்கும்\nஊதியமும் சூழ்ந்து செயல்.",
+    translation: "Act after considering what is lost, what is gained, and what profit the path brings.",
+    chapter: "காலமறிதல் — Knowing the Time",
+  },
+  {
+    number: 595,
+    tamil: "வினைத்திட்பம் என்பது ஒருவன் மனத்திட்பம்\nமற்றைய எல்லாம் பிற.",
+    translation: "Firmness in action is born of firmness of mind; everything else is secondary.",
+    chapter: "வினைத்திட்பம் — Firmness of Action",
+  },
+  {
+    number: 664,
+    tamil: "ஒல்வது அறிவது அறிந்தீண்டு வீறெய்தல்\nசொல்வது சூழ்ச்சி கடன்.",
+    translation: "The duty of deliberation is to know what is possible, grasp what is wise, and achieve greatness.",
+    chapter: "சூழ்ச்சி — Deliberation",
+  },
+  {
+    number: 702,
+    tamil: "தக்கார் இனத்தனாய்த் தானொழுக வல்லானைச்\nசெற்றார் செயக்கிடப்பது இல்.",
+    translation: "No enemy can harm a leader who moves rightly in the company of the virtuous.",
+    chapter: "சுற்றந்தழால் — Cherishing Kinsmen",
+  },
+  {
+    number: 1330,
+    tamil: "கண்டார் உயிர்உண்ணும் தோற்றத்தால் பெண்டகைப்\nபேதைக்கு மாறு இல் படை.",
+    translation: "There is no weapon equal to the beauty of a woman whose glance devours the life of those who see her.",
+    chapter: "குறிப்பறிதல் — Reading Hints",
+  },
+];
+
+function ThirukkuralSlideshow() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (!visible) {
+      const t = setTimeout(() => {
+        setIndex((prev) => (prev + 1) % THIRUKKURALS.length);
+        setVisible(true);
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [visible]);
+
+  const kural = THIRUKKURALS[index];
+
+  return (
+    <div
+      className="mei-kural"
+      style={{
+        maxWidth: 900,
+        margin: "0 auto",
+        padding: "40px 48px",
+        background: "rgba(201,168,76,0.08)",
+        borderRadius: 20,
+        border: "1px solid rgba(201,168,76,0.2)",
+        opacity: visible ? 1 : 0,
+        transition: "opacity 0.6s ease",
+        minHeight: 220,
+      }}
+    >
+      <div
+        style={{
+          color: "#c9a84c",
+          fontSize: 12,
+          fontWeight: 600,
+          letterSpacing: 2,
+          marginBottom: 16,
+          textTransform: "uppercase",
+        }}
+      >
+        திருக்குறள் #{kural.number} — {kural.chapter}
+      </div>
+      {kural.tamil.split("\n").map((line, i) => (
+        <div
+          key={i}
+          className="mei-kural-line"
+          style={{
+            fontFamily: "Outfit",
+            fontSize: 36,
+            fontWeight: 800,
+            color: i === 0 ? "white" : "#c9a84c",
+            lineHeight: 1.5,
+            marginBottom: i === 0 ? 8 : 20,
+          }}
+        >
+          {line}
+        </div>
+      ))}
+      <div
+        style={{
+          color: "#a8b8d0",
+          fontSize: 17,
+          fontStyle: "italic",
+          lineHeight: 1.6,
+          marginBottom: 16,
+        }}
+      >
+        "{kural.translation}"
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+        }}
+      >
+        <div style={{ color: "#64748b", fontSize: 14 }}>
+          — திருவள்ளுவர் / Thiruvalluvar
+        </div>
+        <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+          {Array.from({ length: 5 }).map((_, d) => (
+            <div
+              key={d}
+              style={{
+                width: index % 5 === d ? 20 : 6,
+                height: 6,
+                borderRadius: 3,
+                background:
+                  index % 5 === d
+                    ? "#c9a84c"
+                    : "rgba(201,168,76,0.25)",
+                transition: "all 0.4s ease",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
   const [lang, setLang] = useState(() => localStorage.getItem("lang") || "en");
@@ -1169,72 +1433,8 @@ export default function Landing() {
           </a>
         </div>
 
-        {/* THIRUKKURAL */}
-        <div
-          className="mei-kural"
-          style={{
-            maxWidth: 900,
-            margin: "0 auto",
-            padding: "40px 48px",
-            background: "rgba(201,168,76,0.08)",
-            borderRadius: 20,
-            border: "1px solid rgba(201,168,76,0.2)",
-          }}
-        >
-          <div
-            style={{
-              color: "#c9a84c",
-              fontSize: 12,
-              fontWeight: 600,
-              letterSpacing: 2,
-              marginBottom: 16,
-              textTransform: "uppercase",
-            }}
-          >
-            திருக்குறள் / Thirukkural — அதிகாரம் 4 — கல்வி
-          </div>
-          <div
-            className="mei-kural-line"
-            style={{
-              fontFamily: "Outfit",
-              fontSize: 40,
-              fontWeight: 800,
-              color: "white",
-              lineHeight: 1.5,
-              marginBottom: 8,
-            }}
-          >
-            கற்க கசடற கற்பவை கற்றபின்
-          </div>
-          <div
-            className="mei-kural-line"
-            style={{
-              fontFamily: "Outfit",
-              fontSize: 40,
-              fontWeight: 800,
-              color: "#c9a84c",
-              lineHeight: 1.5,
-              marginBottom: 20,
-            }}
-          >
-            நிற்க அதற்குத் தக.
-          </div>
-          <div
-            style={{
-              color: "#a8b8d0",
-              fontSize: 18,
-              fontStyle: "italic",
-              lineHeight: 1.6,
-              marginBottom: 8,
-            }}
-          >
-            "Learn thoroughly what is worth learning; then live by what you have
-            learnt."
-          </div>
-          <div style={{ color: "#64748b", fontSize: 14 }}>
-            — திருவள்ளுவர் / Thiruvalluvar
-          </div>
-        </div>
+        {/* THIRUKKURAL SLIDESHOW */}
+        <ThirukkuralSlideshow />
 
         {/* Stats */}
         <div
